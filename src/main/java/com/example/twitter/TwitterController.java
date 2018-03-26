@@ -18,7 +18,7 @@ public class TwitterController {
     private TwitterService twitterService;
     private static final org.apache.log4j.Logger LOG = Logger.getLogger(TwitterController.class);
 
-    @RequestMapping(value = "tag", method = RequestMethod.GET)
+    @RequestMapping(value = "sortedTweets", method = RequestMethod.GET)
     public List<WordItem> getTwitterTag(@RequestParam("tag") String tag) throws TagInputException, TwitterException {
         String hashTag = createHashtagFromQueryString(tag);
         List<WordItem> words = twitterService.handleRequest(hashTag);

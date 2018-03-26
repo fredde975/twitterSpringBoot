@@ -13,10 +13,9 @@ import java.util.Map;
 public class TwitterRepository {
     private static final org.apache.log4j.Logger LOG = Logger.getLogger(TwitterRepository.class);
     private static final int MAX_QUERIES = 5;
-    private Map<String, WordItem> resultMap = new HashMap<>();
-
 
     public Map<String, WordItem> getTweets(Query query, Twitter twitter) throws TwitterException {
+        Map<String, WordItem> resultMap = new HashMap<>();
         long maxID = -1;
         int totalTweets = 0;
 
@@ -58,7 +57,7 @@ public class TwitterRepository {
                     maxID = s.getId();
                 }
 
-                handleTweetText(s);
+                handleTweetText(s, resultMap);
             }
         }
 
@@ -67,15 +66,15 @@ public class TwitterRepository {
         return resultMap;
     }
 
-    private void handleTweetText(Status status) {
+    private void handleTweetText(Status status, Map<String, WordItem> resultMap) {
         String text = status.getText();
         Arrays.asList(text.split("\\s+"))       //split text on white space
                 .stream()
-                .forEach(word -> addWordToMap(word));
+                .forEach(word -> addWordToMap(word, resultMap));
     }
 
 
-    private void addWordToMap(String word) {
+    private void addWordToMap(String word, Map<String, WordItem> resultMap) {
         if (resultMap.containsKey(word)) {
             WordItem item = resultMap.get(word);
             resultMap.replace(word, new WordItem(word, item.getCount() + 1));

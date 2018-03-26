@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TwitterService {
-
     private static final Logger LOG = Logger.getLogger(TwitterService.class);
     private static final String CONSUMER_KEY = "SSVbNkmx7ugzaOfaSsG8iRSij";
     private static final String CONSUMER_SECRET = "fBop27mqeaK8tcYp5hmL7vmSWSfbp3ys4qP14JgWyqMsh5UA6X";
@@ -19,6 +18,7 @@ public class TwitterService {
 
     public List<WordItem> handleRequest(String tag) throws TwitterException {
         TwitterRepository twitterRepository = new TwitterRepository();
+
         String hashTag = createHashtagFromQueryString(tag);
         Twitter twitter = createTwitterInstance();
         TwitterUtil.checkLimits(twitter);
@@ -30,15 +30,19 @@ public class TwitterService {
     }
 
 
-    private Query createQuery(String hashTag) {
-        Query queryMax = new Query(hashTag);
-        queryMax.setCount(TWEETS_PER_QUERY);
-        return queryMax;
+    private String createHashtagFromQueryString(String tag) throws IllegalArgumentException {
+        if (tag != null && tag.length() > 0 && !tag.startsWith("#")) {
+            LOG.info("Recieved tag: " + tag);
+            return "#" + tag;
+        }
+
+        throw new IllegalArgumentException("You must have the query string 'twitterTag=tagname' set in the url, i.e. don't use '#' in the query");
     }
 
 
     private Twitter createTwitterInstance() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
+
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey(CONSUMER_KEY)
                 .setOAuthConsumerSecret(CONSUMER_SECRET)
@@ -48,14 +52,11 @@ public class TwitterService {
         return tf.getInstance();
     }
 
+    private Query createQuery(String hashTag) {
+        Query queryMax = new Query(hashTag);
 
-    private String createHashtagFromQueryString(String tag) throws IllegalArgumentException {
-        if (tag != null && tag.length() > 0 && !tag.startsWith("#")) {
-            LOG.info("Recieved tag: " + tag);
-            return "#" + tag;
-        }
-
-        throw new IllegalArgumentException("You must have the query string 'twitterTag=tagname' set in the url, i.e. don't use '#' in the query");
+        queryMax.setCount(TWEETS_PER_QUERY);
+        return queryMax;
     }
 
 

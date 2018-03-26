@@ -1,4 +1,4 @@
-package com.example.twitter;
+package com.example.twitter.utils;
 
 import org.apache.log4j.Logger;
 import twitter4j.RateLimitStatus;

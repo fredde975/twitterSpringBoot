@@ -1,8 +1,9 @@
 package com.example.twitter;
 
+import com.example.twitter.models.WordItem;
+import com.example.twitter.utils.TwitterUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -24,9 +25,8 @@ public class TwitterService {
     TwitterRepository twitterRepository;
 
 
-    public List<WordItem> handleRequest(String tag) throws TwitterException {
-
-        String hashTag = createHashtagFromQueryString(tag);
+    public List<WordItem> handleRequest(String hashTag) throws TwitterException {
+       // String hashTag = createHashtagFromQueryString(tag);
         Twitter twitter = createTwitterInstance();
         TwitterUtil.checkLimits(twitter);
         Query queryMax = createQuery(hashTag);
@@ -37,14 +37,14 @@ public class TwitterService {
     }
 
 
-    private String createHashtagFromQueryString(String tag) throws IllegalArgumentException {
-        if (tag != null && tag.length() > 0 && !tag.startsWith("#")) {
-            LOG.info("Recieved tag: " + tag);
-            return "#" + tag;
-        }
-
-        throw new IllegalArgumentException("You must have the query string 'twitterTag=tagname' set in the url, i.e. don't use '#' in the query");
-    }
+//    private String createHashtagFromQueryString(String tag) throws TagInputException {
+//        if (tag != null && tag.length() > 0 && !tag.startsWith("#")) {
+//            LOG.info("Recieved tag: " + tag);
+//            return "#" + tag;
+//        }
+//
+//        throw new TagInputException("You must have the query string 'twitterTag=tagname' set in the url, i.e. don't use '#' in the query");
+//    }
 
 
     private Twitter createTwitterInstance() {

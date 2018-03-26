@@ -1,10 +1,8 @@
-package com.example.twitter;
+package com.example.twitter.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Objects;
 
 @Data
 @NoArgsConstructor

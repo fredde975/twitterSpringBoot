@@ -1,5 +1,6 @@
 package com.example.twitter;
 
+import com.example.twitter.models.WordItem;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import twitter4j.*;

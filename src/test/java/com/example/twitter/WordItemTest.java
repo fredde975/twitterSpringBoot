@@ -1,5 +1,6 @@
 package com.example.twitter;
 
+import com.example.twitter.models.WordItem;
 import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;

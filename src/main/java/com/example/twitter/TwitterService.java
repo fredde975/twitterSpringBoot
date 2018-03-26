@@ -17,29 +17,16 @@ public class TwitterService {
     private static final String ACCESS_TOKEN_SECRET = "hNI81vC3XbSp3tpiQ4m1dywL1KbJ0W3O0LqfcDwCsMAqO";
     private static final int TWEETS_PER_QUERY = 100;
 
-    public List<WordItem> handleRequest(String tag)throws TwitterException {
+    public List<WordItem> handleRequest(String tag) throws TwitterException {
         TwitterRepository twitterRepository = new TwitterRepository();
-        LOG.info("received: " + tag);
+        String hashTag = createHashtagFromQueryString(tag);
+        Twitter twitter = createTwitterInstance();
+        TwitterUtil.checkLimits(twitter);
+        Query queryMax = createQuery(hashTag);
+        Map<String, WordItem> resultMap = twitterRepository.getTweets(queryMax, twitter);
+        List<WordItem> wordItems = createSortedList(resultMap);
 
-        final String hashTag;
-     //   try {
-            hashTag = createHashtagFromQueryString(tag);
-
-            Twitter twitter = createTwitterInstance();
-            TwitterUtil.checkLimits(twitter);
-            Query queryMax = createQuery(hashTag);
-            Map<String, WordItem> resultMap = twitterRepository.getTweets(queryMax, twitter);
-            List<WordItem> wordItems = createSortedList(resultMap);
-
-            return wordItems;
-
-//        } catch (IllegalArgumentException e) {
-//            return getApiGatewayExceptionResponse(e, 422);  //not correct input
-//        } catch (IllegalStateException e) {
-//            return getApiGatewayExceptionResponse(e, 511);  //read limit reached
-//        } catch (TwitterException e) {
-//            return getApiGatewayExceptionResponse(e, 500);  //any Twitter exception
-//        }
+        return wordItems;
     }
 
 
@@ -60,24 +47,6 @@ public class TwitterService {
         TwitterFactory tf = new TwitterFactory(cb.build());
         return tf.getInstance();
     }
-
-
-//    private ApiGatewayResponse getApiGatewayResponse(List<WordItem> wordItems) {
-//        return ApiGatewayResponse.builder()
-//                .setStatusCode(200)
-//                .setObjectBody(wordItems)
-//                .build();
-//    }
-//
-//
-//    private ApiGatewayResponse getApiGatewayExceptionResponse(Exception e, int responseCode) {
-//        LOG.error(e.getMessage());
-//
-//        return ApiGatewayResponse.builder()
-//                .setStatusCode(responseCode)
-//                .setObjectBody(e.getMessage())
-//                .build();
-//    }
 
 
     private String createHashtagFromQueryString(String tag) throws IllegalArgumentException {

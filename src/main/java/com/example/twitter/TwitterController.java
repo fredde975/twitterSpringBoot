@@ -22,15 +22,4 @@ public class TwitterController {
 
         return words;
     }
-
-//    @RequestMapping(value="user", method = RequestMethod.GET)
-//    public @ResponseBody
-//    item getitem(@RequestParam("data") String itemid){
-//
-//        item i = itemDao.findOne(itemid);
-//        String Itemname=i.getItemname();
-//        String price= i.getPrice();
-//        return i;
-//    }
-
 }

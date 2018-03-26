@@ -1,6 +1,5 @@
 package com.example.twitter;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import twitter4j.TwitterException;
 

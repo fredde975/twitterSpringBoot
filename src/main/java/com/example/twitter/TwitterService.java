@@ -1,6 +1,9 @@
 package com.example.twitter;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -8,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class TwitterService {
     private static final Logger LOG = Logger.getLogger(TwitterService.class);
     private static final String CONSUMER_KEY = "SSVbNkmx7ugzaOfaSsG8iRSij";
@@ -16,8 +20,11 @@ public class TwitterService {
     private static final String ACCESS_TOKEN_SECRET = "hNI81vC3XbSp3tpiQ4m1dywL1KbJ0W3O0LqfcDwCsMAqO";
     private static final int TWEETS_PER_QUERY = 100;
 
+    @Autowired
+    TwitterRepository twitterRepository;
+
+
     public List<WordItem> handleRequest(String tag) throws TwitterException {
-        TwitterRepository twitterRepository = new TwitterRepository();
 
         String hashTag = createHashtagFromQueryString(tag);
         Twitter twitter = createTwitterInstance();

@@ -14,32 +14,39 @@ public class ConcurrentRequestsFilter implements Filter {
     private static final org.apache.log4j.Logger LOG = Logger.getLogger(ConcurrentRequestsFilter.class);
     private static int concurrentRequests = 0;
 
-
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
         LOG.info("init filter");
     }
 
     @Override
+    public void destroy() {
+        LOG.info("Destroy filter");
+    }
+
+    @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
-        concurrentRequests++;
+        incrementConcurrentRequests();
         System.out.println("Concurrent Requests: " + concurrentRequests);
 
-        if(concurrentRequests > 1){
-            concurrentRequests--;
+        if (concurrentRequests > 3) {
+            decrementConcurrentRequests();
             throw new ServletException("The number of concurrent requests is already at 3");
         }
 
         chain.doFilter(request, response);
 
-        concurrentRequests--;
+        decrementConcurrentRequests();
         System.out.println("Concurrent Requests: " + concurrentRequests);
-
     }
 
-    @Override
-    public void destroy() {
-        LOG.warn("Destroy filter");
+
+    public static synchronized void incrementConcurrentRequests() {
+        concurrentRequests++;
+    }
+
+    public static synchronized void decrementConcurrentRequests() {
+        concurrentRequests--;
     }
 }

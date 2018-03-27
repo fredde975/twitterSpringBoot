@@ -1,6 +1,6 @@
 # twitterSpringBoot
 
-Url för att köra tjänsten: http://127.0.0.1:8080/sortedTweets?tag=yolo
+Url för att köra tjänsten: http://127.0.0.1:8080/sortedTweets?twitterTag=yolo
 
 Tjänsten är satt till att högst läsa in 500 tweets. Ut från tjänsten returneras en lista (högst 100 ord) med populäraste
 orden, sorterat i fallande popularitetsordning.

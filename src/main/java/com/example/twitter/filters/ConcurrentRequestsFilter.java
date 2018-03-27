@@ -13,6 +13,7 @@ import java.io.IOException;
 public class ConcurrentRequestsFilter implements Filter {
     private static final org.apache.log4j.Logger LOG = Logger.getLogger(ConcurrentRequestsFilter.class);
     private static int concurrentRequests = 0;
+    private final int MAX_CONCURRENT_REQUESTS = 3;
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
@@ -30,7 +31,7 @@ public class ConcurrentRequestsFilter implements Filter {
         incrementConcurrentRequests();
         System.out.println("Concurrent Requests: " + concurrentRequests);
 
-        if (concurrentRequests > 3) {
+        if (concurrentRequests > MAX_CONCURRENT_REQUESTS) {
             decrementConcurrentRequests();
             throw new ServletException("The number of concurrent requests is already at 3");
         }
